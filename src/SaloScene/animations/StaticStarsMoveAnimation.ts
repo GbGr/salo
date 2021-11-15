@@ -7,7 +7,7 @@ StaticStarsMoveAnimation.setEasingFunction(new SineEase())
 
 StaticStarsMoveAnimation.setKeys([
     { frame: 0, value: 500 },
-    { frame: 5 * 60, value: 0 },
+    { frame: 5 * 60, value: 50 },
 ])
 
 export default StaticStarsMoveAnimation

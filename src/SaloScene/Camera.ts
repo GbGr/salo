@@ -25,7 +25,7 @@ export default class Camera extends UniversalCamera {
         this.rotationQuaternion = Quaternion.Identity()
         this.minZ = 0.01
 
-        // this.attachControl()
+        this.attachControl()
 
         window.addEventListener('mousemove', this.followCursor)
 

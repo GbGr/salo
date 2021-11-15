@@ -64,20 +64,20 @@ export default class SceneAssetsManager extends AssetsManager {
             starsTransform.position.set(0, 0, 50)
         }
 
-        const STATIC_STARS_COUNT = 1000
+        const staticStar = MeshBuilder.CreateSphere('staticStar', { diameter: 1, segments: 4 }, this.scene)
+        const STATIC_STARS_COUNT = 1500
         const MATRIX_BUFFER = new Matrix()
         const v3Scale = new Vector3()
         const v3Position = new Vector3()
         const quaternion = Quaternion.Identity()
-        const staticStar = MeshBuilder.CreateSphere('staticStar', { diameter: 1 }, this.scene)
         const bufferMatrices = new Float32Array(16 * STATIC_STARS_COUNT)
 
         for (let i = 0; i < STATIC_STARS_COUNT; i++) {
             v3Scale.setAll(0.1 + Math.random() * 0.1)
             v3Position.set(
-                -100 + Math.random() * 200,
-                -100 + Math.random() * 200,
-                -100 + Math.random() * 200
+                -50 + Math.random() * 100,
+                -50 + Math.random() * 100,
+                -50 + Math.random() * 100
             )
             Matrix.ComposeToRef(
                 v3Scale,
@@ -93,6 +93,7 @@ export default class SceneAssetsManager extends AssetsManager {
         staticStar.material = starNodeMaterial
         gl.referenceMeshToUseItsOwnMaterial(staticStar)
         this._staticStars = staticStar
+        staticStar.position.z = 70
 
         return this.loadAsync()
     }
