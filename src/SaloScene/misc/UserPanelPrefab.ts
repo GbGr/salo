@@ -7,7 +7,9 @@ import Camera from "../Camera";
 
 export default class UserPanelPrefab {
     private readonly _gui: AdvancedDynamicTexture
+
     constructor(
+        private readonly _avatars: Array<string>,
         private readonly _virtualStars: Array<InstancedMesh>,
         private readonly _scene: Scene) {
         this._gui = AdvancedDynamicTexture.CreateFullscreenUI('GUI', true, this._scene)
@@ -28,33 +30,23 @@ export default class UserPanelPrefab {
         })
 
         this._scene.onBeforeRenderObservable.add(() => {
-            const progress = camera.progress / 0.2
-            const visibleWindow = 0.1
+            const progress = camera.progress * 30
             const panelsCount = this._virtualStars.length
 
             this._virtualStars.forEach((host, idx) => {
                 const hostProgress = idx / panelsCount
                 const panel = hostHasPanel.get(host)
                 if (!panel) throw new Error()
-                if (progress === 0) {
-                    if (idx === 0) panel.alpha = 1
-                    panel.scaleX = panel.scaleY = 1
-                    return
-                }
-                if (progress > 1) {
+                if (idx === 0 && progress < 0.4) {
                     panel.alpha = 1
                     panel.scaleX = panel.scaleY = 1
                     return
                 }
-                if (hostProgress < progress + visibleWindow && hostProgress > progress - visibleWindow) {
-                    panel.alpha = 1
-                    panel.scaleX = panel.scaleY = hostProgress > progress
-                        ? (hostProgress - progress) > visibleWindow ? 0 : (hostProgress - progress) / visibleWindow
-                        : (progress - hostProgress) > visibleWindow ? 0 : 1
-                } else {
-                    panel.alpha = 0
-                    panel.scaleX = panel.scaleY = 0
-                }
+                panel.scaleX = panel.scaleY = progress > 3
+                    ? Math.max((1 - (progress - 3) / 2) * 0.3, 0)
+                    : (progress - hostProgress) > 0.2
+                        ? 0.3
+                        : Math.min((1 - hostProgress) * progress, 1)
             })
         })
     }

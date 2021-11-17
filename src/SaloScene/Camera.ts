@@ -10,6 +10,8 @@ const easing = new SineEase()
 easing.setEasingMode(SineEase.EASINGMODE_EASEOUT)
 moveToStarsAnimation.setEasingFunction(easing)
 
+const BASE_SPEED = 0.00001
+
 export default class Camera extends UniversalCamera {
     public readonly movedToStarsEvent = new TypedEvent<void>()
     private readonly _targetRotation = Quaternion.Identity()
@@ -60,7 +62,8 @@ export default class Camera extends UniversalCamera {
     private onWheel = (e: WheelEvent): void => {
         e.preventDefault()
         e.stopPropagation()
-        this._progress = Math.max(Math.min(this._progress + (e.deltaY * 0.0001), 1), 0)
-        this.position.z = this._baseZ - this._progress * 4
+        const factor = this._progress > 0.24 ? this._progress * 10 * BASE_SPEED : BASE_SPEED
+        this._progress = Math.max(Math.min(this._progress + (e.deltaY * factor), 1), 0)
+        this.position.z = this._baseZ - this._progress * 4.4
     }
 }

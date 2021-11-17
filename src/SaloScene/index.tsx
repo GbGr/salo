@@ -9,7 +9,7 @@ const SaloScene: FC = () => {
 
         const sceneRuntime = new Runtime(canvasRef.current)
 
-        sceneRuntime.startup()
+        sceneRuntime.startup(new Array(50).fill('/scene/avatar.png')).catch(console.error)
 
         return () => {
             sceneRuntime.dispose()
